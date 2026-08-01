@@ -1,15 +1,32 @@
-import React from "react";
+"use client";
 
-const page = () => {
+import Link from "next/link";
+import { Button } from "@/components/ui/button";
+import { OverviewCards } from "@/components/dashboard/tenant/OverviewCards";
+import { RentalRequestsTable } from "@/components/dashboard/tenant/RentalRequestsTable";
+
+export default function TenantDashboardPage() {
   return (
-    <div>
-      <h1>Tenant Dashboard</h1>
-      <p>
-        Welcome to the tenant dashboard. Here you can manage your properties and
-        view your rental information.
-      </p>
+    <div className="space-y-6">
+      <div className="flex items-center justify-between">
+        <div>
+          <h1 className="text-2xl font-bold">Welcome back</h1>
+          <p className="text-sm text-muted-foreground">
+            Here&apos;s an overview of your rentals
+          </p>
+        </div>
+        <Button asChild>
+          <Link href="/properties">Browse Properties</Link>
+        </Button>
+      </div>
+
+      <OverviewCards />
+
+      <div>
+        <h2 className="mb-4 text-lg font-semibold">Recent Requests</h2>
+        <RentalRequestsTable limit={5} />
+      </div>
+      
     </div>
   );
-};
-
-export default page;
+}

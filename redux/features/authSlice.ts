@@ -5,7 +5,7 @@ import Cookies from "js-cookie";
 interface AuthState {
   user: User | null;
   token: string | null;
-  isAuthChecked: boolean; // true once we've resolved whether a session exists
+  isAuthChecked: boolean;
 }
 
 const initialState: AuthState = {
@@ -31,6 +31,10 @@ const authSlice = createSlice({
       state.user = action.payload;
       state.isAuthChecked = true;
     },
+    updateUser: (state, action: PayloadAction<User>) => {
+      // Called after a profile update so Navbar/sidebar reflect changes immediately
+      state.user = action.payload;
+    },
     logout: (state) => {
       state.user = null;
       state.token = null;
@@ -40,5 +44,6 @@ const authSlice = createSlice({
   },
 });
 
-export const { setCredentials, setAuthChecked, logout } = authSlice.actions;
+export const { setCredentials, setAuthChecked, updateUser, logout } =
+  authSlice.actions;
 export default authSlice.reducer;

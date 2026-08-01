@@ -29,7 +29,7 @@ export function NavUser() {
   const token = useAppSelector((state) => state.auth.token);
   const dispatch = useAppDispatch();
 
-  const { data, error, isLoading } = useGetMeQuery({ skip: !token }) as any;
+  const { data, error, isLoading } = useGetMeQuery() as any;
 
   const router = useRouter();
   const pathname = usePathname();
