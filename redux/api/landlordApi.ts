@@ -9,7 +9,7 @@ import { RentalRequest, RentalStatus } from "@/src/types/rental";
 export const landlordApi = baseApi.injectEndpoints({
   endpoints: (builder) => ({
     getLandlordStats: builder.query<{ success: boolean; data: LandlordStats }, void>({
-      query: () => "/landlord/stats",
+      query: () => "/stats",
       providesTags: ["Property", "Rental"],
     }),
 
@@ -18,7 +18,7 @@ export const landlordApi = baseApi.injectEndpoints({
       { page?: number; limit?: number } | void
     >({
       query: (params) =>
-        `/landlord/properties?page=${params?.page ?? 1}&limit=${params?.limit ?? 10}`,
+        `/properties?page=${params?.page ?? 1}&limit=${params?.limit ?? 10}`,
       providesTags: (result) =>
         result
           ? [
@@ -32,7 +32,7 @@ export const landlordApi = baseApi.injectEndpoints({
       <{ success: boolean; data: LandlordProperty },
       string
     >({
-      query: (id) => `/landlord/properties/${id}`,
+      query: (id) => `/properties/${id}`,
       providesTags: (result, error, id) => [{ type: "Property", id }],
     }),
 
@@ -40,7 +40,7 @@ export const landlordApi = baseApi.injectEndpoints({
       CreatePropertyPayload
     >({
       query: (payload) => ({
-        url: "/landlord/properties",
+        url: "/properties",
         method: "POST",
         body: payload,
       }),
@@ -51,7 +51,7 @@ export const landlordApi = baseApi.injectEndpoints({
       { id: string; payload: UpdatePropertyPayload }
     >({
       query: ({ id, payload }) => ({
-        url: `/landlord/properties/${id}`,
+        url: `/properties/${id}`,
         method: "PATCH",
         body: payload,
       }),
@@ -63,7 +63,7 @@ export const landlordApi = baseApi.injectEndpoints({
 
     deleteProperty: builder.mutation<{ success: boolean }, string>({
       query: (id) => ({
-        url: `/landlord/properties/${id}`,
+        url: `/properties/${id}`,
         method: "DELETE",
       }),
       invalidatesTags: [{ type: "Property", id: "LANDLORD_LIST" }],
@@ -74,7 +74,7 @@ export const landlordApi = baseApi.injectEndpoints({
       { status?: RentalStatus } | void
     >({
       query: (params) =>
-        `/landlord/requests${params?.status ? `?status=${params.status}` : ""}`,
+        `/requests${params?.status ? `?status=${params.status}` : ""}`,
       providesTags: (result) =>
         result
           ? [
@@ -89,7 +89,7 @@ export const landlordApi = baseApi.injectEndpoints({
       { id: string; status: "APPROVED" | "REJECTED" }
     >({
       query: ({ id, status }) => ({
-        url: `/landlord/requests/${id}`,
+        url: `/requests/${id}`,
         method: "PATCH",
         body: { status },
       }),
