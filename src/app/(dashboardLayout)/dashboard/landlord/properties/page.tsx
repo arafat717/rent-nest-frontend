@@ -1,18 +1,16 @@
-"use client";
-
 import Link from "next/link";
 import { PlusCircle } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { OverviewCards } from "@/components/dashboard/Landlord/OverviewCards";
-import { RentalRequestsTable } from "@/components/dashboard/tenant/RentalRequestsTable";
-export default function LandlordDashboardPage() {
+import { PropertiesTable } from "@/components/dashboard/Landlord/PropertiesTable";
+
+export default function LandlordPropertiesPage() {
   return (
     <div className="space-y-6">
       <div className="flex items-center justify-between">
         <div>
-          <h1 className="text-2xl font-bold">Landlord Overview</h1>
+          <h1 className="text-2xl font-bold">My Properties</h1>
           <p className="text-sm text-muted-foreground">
-            Manage your properties and rental requests
+            Manage your listings and availability
           </p>
         </div>
         <Button asChild>
@@ -22,13 +20,7 @@ export default function LandlordDashboardPage() {
           </Link>
         </Button>
       </div>
-
-      <OverviewCards />
-
-      <div>
-        <h2 className="mb-4 text-lg font-semibold">Recent Requests</h2>
-        <RentalRequestsTable limit={5} />
-      </div>
+      <PropertiesTable />
     </div>
   );
 }
