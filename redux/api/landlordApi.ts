@@ -2,13 +2,20 @@
 import { Meta } from "@/src/types/property";
 import { baseApi } from "./baseApi";
 
-
-import {  CreatePropertyPayload, LandlordProperty, LandlordStats, UpdatePropertyPayload } from "@/src/types/landlordProperty";
+import {
+  CreatePropertyPayload,
+  LandlordProperty,
+  LandlordStats,
+  UpdatePropertyPayload,
+} from "@/src/types/landlordProperty";
 import { RentalRequest, RentalStatus } from "@/src/types/rental";
 
 export const landlordApi = baseApi.injectEndpoints({
   endpoints: (builder) => ({
-    getLandlordStats: builder.query<{ success: boolean; data: LandlordStats }, void>({
+    getLandlordStats: builder.query<
+      { success: boolean; data: LandlordStats },
+      void
+    >({
       query: () => "/stats",
       providesTags: ["Property", "Rental"],
     }),
@@ -22,21 +29,25 @@ export const landlordApi = baseApi.injectEndpoints({
       providesTags: (result) =>
         result
           ? [
-              ...result.data.map(({ id }) => ({ type: "Property" as const, id })),
+              ...result.data.map(({ id }) => ({
+                type: "Property" as const,
+                id,
+              })),
               { type: "Property" as const, id: "LANDLORD_LIST" },
             ]
           : [{ type: "Property", id: "LANDLORD_LIST" }],
     }),
 
-    getLandlordPropertyById: builder.query
-      <{ success: boolean; data: LandlordProperty },
+    getLandlordPropertyById: builder.query<
+      { success: boolean; data: LandlordProperty },
       string
     >({
       query: (id) => `/properties/${id}`,
       providesTags: (result, error, id) => [{ type: "Property", id }],
     }),
 
-    createProperty: builder.mutation<{ success: boolean; data: LandlordProperty },
+    createProperty: builder.mutation<
+      { success: boolean; data: LandlordProperty },
       CreatePropertyPayload
     >({
       query: (payload) => ({
@@ -47,7 +58,8 @@ export const landlordApi = baseApi.injectEndpoints({
       invalidatesTags: [{ type: "Property", id: "LANDLORD_LIST" }],
     }),
 
-    updateProperty: builder.mutation<{ success: boolean; data: LandlordProperty },
+    updateProperty: builder.mutation<
+      { success: boolean; data: LandlordProperty },
       { id: string; payload: UpdatePropertyPayload }
     >({
       query: ({ id, payload }) => ({
@@ -74,7 +86,7 @@ export const landlordApi = baseApi.injectEndpoints({
       { status?: RentalStatus } | void
     >({
       query: (params) =>
-        `/requests${params?.status ? `?status=${params.status}` : ""}`,
+        `/rentals/requests${params?.status ? `?status=${params.status}` : ""}`,
       providesTags: (result) =>
         result
           ? [
@@ -89,7 +101,7 @@ export const landlordApi = baseApi.injectEndpoints({
       { id: string; status: "APPROVED" | "REJECTED" }
     >({
       query: ({ id, status }) => ({
-        url: `/requests/${id}`,
+        url: `/rentals/requests/${id}`,
         method: "PATCH",
         body: { status },
       }),
@@ -101,10 +113,10 @@ export const landlordApi = baseApi.injectEndpoints({
             "getLandlordRequests",
             undefined,
             (draft) => {
-              const request = draft.data.find((r:any) => r.id === id);
+              const request = draft.data.find((r: any) => r.id === id);
               if (request) request.status = status;
-            }
-          )
+            },
+          ),
         );
         try {
           await queryFulfilled;

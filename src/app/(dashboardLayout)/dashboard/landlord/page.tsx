@@ -4,7 +4,7 @@ import Link from "next/link";
 import { PlusCircle } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { OverviewCards } from "@/components/dashboard/Landlord/OverviewCards";
-import { RentalRequestsTable } from "@/components/dashboard/tenant/RentalRequestsTable";
+import { RentalRequestsTable } from "@/components/dashboard/Landlord/RentalRequestTable";
 export default function LandlordDashboardPage() {
   return (
     <div className="space-y-6">
