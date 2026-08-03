@@ -61,7 +61,7 @@ export default function TenantPaymentsPage() {
               {payments.map((payment) => (
                 <TableRow key={payment.id}>
                   <TableCell className="font-medium">
-                    {payment.property.title}
+                    {payment?.property?.title}
                   </TableCell>
                   <TableCell>${payment.amount.toLocaleString()}</TableCell>
                   <TableCell>

@@ -39,15 +39,17 @@ export default function EditPropertyPage() {
         defaultValues={{
           title: property.title,
           description: property.description,
+          type: property.type, // was `property.propertyType` — field didn't exist, caused the enum error
           price: property.price,
-          location: property.location,
-          city: property.city,
-          propertyType: property.propertyType,
           bedrooms: property.bedrooms,
           bathrooms: property.bathrooms,
           areaSqft: property.areaSqft,
+          location: property.location,
+          city: property.city,
+          address: property.address,
           amenities: property.amenities,
           images: property.images.length ? property.images : [""],
+          categoryId: property.categoryId,
         }}
       />
     </div>

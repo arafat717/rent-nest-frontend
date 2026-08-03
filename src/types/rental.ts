@@ -24,11 +24,6 @@ export interface RentalRequest {
   createdAt: string;
 }
 
-export interface CreateRentalRequestPayload {
-  propertyId: string;
-  moveInDate: string;
-  message?: string;
-}
 
 export interface Payment {
   id: string;
@@ -69,4 +64,11 @@ export interface ConfirmPaymentResponse {
     payment: Payment;
     rentalRequest: RentalRequest;
   };
+}
+
+export interface CreateRentalRequestPayload {
+  propertyId: string;
+  moveInDate: string;
+  moveOutDate: string;
+  message?: string;
 }

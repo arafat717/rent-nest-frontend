@@ -43,16 +43,6 @@ const data = {
         url: "/dashboard/tenant/payments",
         icon: CreditCard,
       },
-      // {
-      //   title: "My Reviews",
-      //   url: "/dashboard/tenant/reviews",
-      //   icon: Star,
-      // },
-      // {
-      //   title: "Browse Properties",
-      //   url: "/properties",
-      //   icon: Building2,
-      // },
       {
         title: "Your Profile",
         url: "/dashboard/tenant/profile",
@@ -94,11 +84,11 @@ const data = {
         url: "/dashboard/landlord/requests",
         icon: ClipboardList,
       },
-      {
-        title: "Earnings",
-        url: "/dashboard/landlord/earnings",
-        icon: CreditCard,
-      },
+      // {
+      //   title: "Earnings",
+      //   url: "/dashboard/landlord/earnings",
+      //   icon: CreditCard,
+      // },
       {
         title: "Your Profile",
         url: "/dashboard/landlord/profile",
@@ -133,16 +123,16 @@ const data = {
         url: "/dashboard/admin/requests",
         icon: ClipboardList,
       },
-      {
-        title: "Reports & Moderation",
-        url: "/dashboard/admin/reports",
-        icon: MessageSquareWarning,
-      },
-      {
-        title: "Payments",
-        url: "/dashboard/admin/payments",
-        icon: CreditCard,
-      },
+      // {
+      //   title: "Reports & Moderation",
+      //   url: "/dashboard/admin/reports",
+      //   icon: MessageSquareWarning,
+      // },
+      // {
+      //   title: "Payments",
+      //   url: "/dashboard/admin/payments",
+      //   icon: CreditCard,
+      // },
       {
         title: "Your Profile",
         url: "/dashboard/admin/profile",

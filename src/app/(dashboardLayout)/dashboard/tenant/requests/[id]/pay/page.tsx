@@ -11,6 +11,7 @@ import { Skeleton } from "@/components/ui/skeleton";
 import {
   useGetRentalRequestByIdQuery,
   useCreatePaymentMutation,
+  useConfirmPaymentMutation,
 } from "@/redux/api/rentalApi";
 
 export default function PaymentPage() {
@@ -19,6 +20,8 @@ export default function PaymentPage() {
   const { data, isLoading, isFetching } = useGetRentalRequestByIdQuery(id);
   const [createPayment, { isLoading: isCreatingPayment }] =
     useCreatePaymentMutation();
+  const [confirmPayment, { isLoading: isConfirmingPayment }] =
+    useConfirmPaymentMutation();
   const [isRedirecting, setIsRedirecting] = useState(false);
 
   const showSkeleton = isLoading || isFetching;
@@ -26,11 +29,18 @@ export default function PaymentPage() {
   const handlePay = async () => {
     setIsRedirecting(true);
     const toastId = toast.loading("Setting up secure checkout...");
-
     try {
       const res = await createPayment({ rentalRequestId: id }).unwrap();
-      toast.success("Redirecting to checkout...", { id: toastId });
-      window.location.href = res.data.checkoutUrl;
+
+      console.log("res", res.data);
+      if(res.data){
+        const confirmRes = await confirmPayment({ paymentIntentId: res.data.paymentIntentId }).unwrap();
+        console.log("confirmRes", confirmRes);
+        if(confirmRes.data){
+          toast.success("Payment successful!", { id: toastId });
+          router.push("/dashboard/tenant/payments");
+        }
+      }
     } catch (error: any) {
       toast.error(
         error?.data?.message || "Couldn't start checkout. Please try again.",

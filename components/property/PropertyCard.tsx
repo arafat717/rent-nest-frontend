@@ -25,9 +25,9 @@ export function PropertyCard({ property }: PropertyCardProps) {
             className="object-cover transition-transform duration-300 group-hover:scale-105"
             sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
           />
-          {!property.isAvailable && (
-            <Badge variant="destructive" className="absolute left-2 top-2">
-              Rented
+          {property.status !== "AVAILABLE" && (
+            <Badge variant="destructive">
+              {property.status === "RENTED" ? "Rented" : "Unavailable"}
             </Badge>
           )}
           <Badge className="absolute right-2 top-2 bg-background text-foreground">

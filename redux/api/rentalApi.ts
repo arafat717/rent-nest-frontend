@@ -1,5 +1,6 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import {
-    ConfirmPaymentPayload,
+  ConfirmPaymentPayload,
   ConfirmPaymentResponse,
   CreatePaymentPayload,
   CreatePaymentResponse,
@@ -51,10 +52,7 @@ export const rentalApi = baseApi.injectEndpoints({
       providesTags: [{ type: "Payment", id: "LIST" }],
     }),
 
-    createPayment: builder.mutation<
-      CreatePaymentResponse,
-      CreatePaymentPayload
-    >({
+    createPayment: builder.mutation<any, any>({
       query: (payload) => ({
         url: "/payments/create",
         method: "POST",
@@ -70,10 +68,7 @@ export const rentalApi = baseApi.injectEndpoints({
       }),
       invalidatesTags: [{ type: "Rental", id: "LIST" }],
     }),
-    confirmPayment: builder.mutation<
-      ConfirmPaymentResponse,
-      ConfirmPaymentPayload
-    >({
+    confirmPayment: builder.mutation<any, any>({
       query: (payload) => ({
         url: "/payments/confirm",
         method: "POST",

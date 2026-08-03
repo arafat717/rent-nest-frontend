@@ -1,12 +1,15 @@
-import React from 'react';
+import { OverviewCards } from "@/components/dashboard/admin/OverviewCards";
 
-const page = () => {
-    return (
-        <div>
-            <h1>Admin Dashboard</h1>
-            <p>Welcome to the admin dashboard. Here you can manage users and view system information.</p>
-        </div>
-    );
-};
-
-export default page;
+export default function AdminDashboardPage() {
+  return (
+    <div className="space-y-6">
+      <div>
+        <h1 className="text-2xl font-bold">Admin Overview</h1>
+        <p className="text-sm text-muted-foreground">
+          Platform-wide stats and health
+        </p>
+      </div>
+      <OverviewCards />
+    </div>
+  );
+}

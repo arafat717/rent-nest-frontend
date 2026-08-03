@@ -7,6 +7,13 @@ import Image from "next/image";
 import { toast } from "sonner";
 import { MoreHorizontal, Pencil, Trash2, Eye } from "lucide-react";
 import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+import {
   Table,
   TableBody,
   TableCell,
@@ -50,20 +57,20 @@ export function PropertiesTable() {
   const showSkeleton = isLoading || isFetching;
   const properties = data?.data ?? [];
 
-  const handleToggleAvailability = async (id: string, isAvailable: boolean) => {
-    const toastId = toast.loading("Updating availability...");
+  const handleStatusChange = async (
+    id: string,
+    status: "AVAILABLE" | "UNAVAILABLE" | "RENTED",
+  ) => {
+    const toastId = toast.loading("Updating status...");
     try {
-      await updateProperty({ id, payload: { isAvailable } }).unwrap();
-      toast.success(isAvailable ? "Marked as available" : "Marked as rented", {
-        id: toastId,
-      });
+      await updateProperty({ id, payload: { status } }).unwrap();
+      toast.success("Status updated", { id: toastId });
     } catch (error: any) {
-      toast.error(error?.data?.message || "Couldn't update availability", {
+      toast.error(error?.data?.message || "Couldn't update status", {
         id: toastId,
       });
     }
   };
-
   const handleDelete = async () => {
     if (!deleteTarget) return;
     const toastId = toast.loading("Deleting property...");
@@ -157,12 +164,24 @@ export function PropertiesTable() {
                   )}
                 </TableCell>
                 <TableCell>
-                  <Switch
-                    checked={property.isAvailable}
-                    onCheckedChange={(checked) =>
-                      handleToggleAvailability(property.id, checked)
+                  <Select
+                    value={property.status}
+                    onValueChange={(value) =>
+                      handleStatusChange(
+                        property.id,
+                        value as "AVAILABLE" | "UNAVAILABLE" | "RENTED",
+                      )
                     }
-                  />
+                  >
+                    <SelectTrigger className="w-32">
+                      <SelectValue />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="AVAILABLE">Available</SelectItem>
+                      <SelectItem value="UNAVAILABLE">Unavailable</SelectItem>
+                      <SelectItem value="RENTED">Rented</SelectItem>
+                    </SelectContent>
+                  </Select>
                 </TableCell>
                 <TableCell className="text-right">
                   <DropdownMenu>

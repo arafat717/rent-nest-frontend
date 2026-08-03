@@ -15,6 +15,8 @@ import {
 } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import { Textarea } from "@/components/ui/textarea";
+import { useCreateRentalRequestMutation } from "@/redux/api/rentalApi";
 
 interface RequestToRentDialogProps {
   propertyId: string;
@@ -27,35 +29,50 @@ export function RequestToRentDialog({
 }: RequestToRentDialogProps) {
   const [open, setOpen] = useState(false);
   const [moveInDate, setMoveInDate] = useState("");
+  const [moveOutDate, setMoveOutDate] = useState("");
   const [message, setMessage] = useState("");
-  const [isSubmitting, setIsSubmitting] = useState(false);
+
+  const [createRentalRequest, { isLoading: isSubmitting }] =
+    useCreateRentalRequestMutation();
+
+  const today = new Date().toISOString().split("T")[0];
 
   const handleSubmit = async () => {
     if (!moveInDate) {
       toast.error("Please select a move-in date");
       return;
     }
+    if (!moveOutDate) {
+      toast.error("Please select a move-out date");
+      return;
+    }
+    if (new Date(moveOutDate) <= new Date(moveInDate)) {
+      toast.error("Move-out date must be after the move-in date");
+      return;
+    }
 
-    setIsSubmitting(true);
     const toastId = toast.loading("Submitting your request...");
 
     try {
-      // TODO: wire up to createRentalRequest mutation once the tenant auth flow is built
-      // await createRentalRequest({ propertyId, moveInDate, message }).unwrap();
-      await new Promise((resolve) => setTimeout(resolve, 800));
+      await createRentalRequest({
+        propertyId,
+        moveInDate: new Date(moveInDate).toISOString(),
+        moveOutDate: new Date(moveOutDate).toISOString(),
+        message: message || undefined,
+      }).unwrap();
 
       toast.success("Request submitted! The landlord will review it shortly.", {
         id: toastId,
       });
       setOpen(false);
       setMoveInDate("");
+      setMoveOutDate("");
       setMessage("");
-    } catch {
-      toast.error("Failed to submit request. Please try again.", {
-        id: toastId,
-      });
-    } finally {
-      setIsSubmitting(false);
+    } catch (error: any) {
+      toast.error(
+        error?.data?.message || "Failed to submit request. Please try again.",
+        { id: toastId },
+      );
     }
   };
 
@@ -77,24 +94,37 @@ export function RequestToRentDialog({
         </DialogHeader>
 
         <div className="space-y-4">
-          <div className="space-y-2">
-            <Label htmlFor="moveInDate">Preferred Move-in Date</Label>
-            <Input
-              id="moveInDate"
-              type="date"
-              value={moveInDate}
-              onChange={(e) => setMoveInDate(e.target.value)}
-              min={new Date().toISOString().split("T")[0]}
-            />
+          <div className="grid grid-cols-2 gap-3">
+            <div className="space-y-2">
+              <Label htmlFor="moveInDate">Move-in Date</Label>
+              <Input
+                id="moveInDate"
+                type="date"
+                value={moveInDate}
+                onChange={(e) => setMoveInDate(e.target.value)}
+                min={today}
+              />
+            </div>
+
+            <div className="space-y-2">
+              <Label htmlFor="moveOutDate">Move-out Date</Label>
+              <Input
+                id="moveOutDate"
+                type="date"
+                value={moveOutDate}
+                onChange={(e) => setMoveOutDate(e.target.value)}
+                min={moveInDate || today}
+              />
+            </div>
           </div>
 
           <div className="space-y-2">
             <Label htmlFor="message">Message (optional)</Label>
-            <textarea
+            <Textarea
               id="message"
               placeholder="Introduce yourself or ask a question..."
               value={message}
-              onChange={(e:any) => setMessage(e.target.value)}
+              onChange={(e) => setMessage(e.target.value)}
               rows={4}
             />
           </div>
