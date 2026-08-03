@@ -35,10 +35,10 @@ export default function PropertyDetailsPage() {
         <div className="space-y-6">
           <div>
             <div className="mb-2 flex items-center gap-2">
-              <Badge variant={property.isAvailable ? "default" : "destructive"}>
-                {property.isAvailable ? "Available" : "Rented"}
+              <Badge variant={property.status === "AVAILABLE" ? "default" : property.status === "RENTED" ? "secondary" : "destructive"}>
+                {property.status }
               </Badge>
-              <Badge variant="outline">{property.propertyType}</Badge>
+              <Badge variant="outline">{property.type}</Badge>
             </div>
             <h1 className="text-3xl font-bold">{property.title}</h1>
             <p className="mt-1 flex items-center gap-1 text-muted-foreground">
@@ -113,7 +113,7 @@ export default function PropertyDetailsPage() {
 
           <RequestToRentDialog
             propertyId={property.id}
-            disabled={!property.isAvailable}
+            disabled={property.status !== "AVAILABLE"}
           />
         </aside>
       </div>

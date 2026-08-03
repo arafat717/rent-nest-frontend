@@ -7,6 +7,13 @@ import Image from "next/image";
 import { toast } from "sonner";
 import { MoreHorizontal, Pencil, Trash2, Eye } from "lucide-react";
 import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+import {
   Table,
   TableBody,
   TableCell,
@@ -49,21 +56,21 @@ export function PropertiesTable() {
 
   const showSkeleton = isLoading || isFetching;
   const properties = data?.data ?? [];
-
-  const handleToggleAvailability = async (id: string, isAvailable: boolean) => {
-    const toastId = toast.loading("Updating availability...");
+  console.log("properties", properties);
+  const handleStatusChange = async (
+    id: string,
+    status: "AVAILABLE" | "UNAVAILABLE" | "RENTED",
+  ) => {
+    const toastId = toast.loading("Updating status...");
     try {
-      await updateProperty({ id, payload: { isAvailable } }).unwrap();
-      toast.success(isAvailable ? "Marked as available" : "Marked as rented", {
-        id: toastId,
-      });
+      await updateProperty({ id, payload: { status } }).unwrap();
+      toast.success("Status updated", { id: toastId });
     } catch (error: any) {
-      toast.error(error?.data?.message || "Couldn't update availability", {
+      toast.error(error?.data?.message || "Couldn't update status", {
         id: toastId,
       });
     }
   };
-
   const handleDelete = async () => {
     if (!deleteTarget) return;
     const toastId = toast.loading("Deleting property...");
@@ -118,7 +125,7 @@ export function PropertiesTable() {
             <TableRow>
               <TableHead>Property</TableHead>
               <TableHead>Price</TableHead>
-              <TableHead>Requests</TableHead>
+              {/* <TableHead>Requests</TableHead> */}
               <TableHead>Available</TableHead>
               <TableHead className="text-right">Actions</TableHead>
             </TableRow>
@@ -149,21 +156,14 @@ export function PropertiesTable() {
                   </div>
                 </TableCell>
                 <TableCell>${property.price.toLocaleString()}/mo</TableCell>
-                <TableCell>
+                {/* <TableCell>
                   {property.activeRequestsCount > 0 ? (
                     <Badge>{property.activeRequestsCount} pending</Badge>
                   ) : (
                     <span className="text-muted-foreground">—</span>
                   )}
-                </TableCell>
-                <TableCell>
-                  <Switch
-                    checked={property.isAvailable}
-                    onCheckedChange={(checked) =>
-                      handleToggleAvailability(property.id, checked)
-                    }
-                  />
-                </TableCell>
+                </TableCell> */}
+                <TableCell>{property.status}</TableCell>
                 <TableCell className="text-right">
                   <DropdownMenu>
                     <DropdownMenuTrigger asChild>

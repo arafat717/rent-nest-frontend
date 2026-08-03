@@ -94,11 +94,11 @@ const data = {
         url: "/dashboard/landlord/requests",
         icon: ClipboardList,
       },
-      {
-        title: "Earnings",
-        url: "/dashboard/landlord/earnings",
-        icon: CreditCard,
-      },
+      // {
+      //   title: "Earnings",
+      //   url: "/dashboard/landlord/earnings",
+      //   icon: CreditCard,
+      // },
       {
         title: "Your Profile",
         url: "/dashboard/landlord/profile",

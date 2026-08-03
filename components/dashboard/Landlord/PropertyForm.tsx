@@ -10,6 +10,7 @@ import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Label } from "@/components/ui/label";
+import { Skeleton } from "@/components/ui/skeleton";
 import {
   Select,
   SelectContent,
@@ -30,6 +31,7 @@ import {
   useCreatePropertyMutation,
   useUpdatePropertyMutation,
 } from "@/redux/api/landlordApi";
+import { useGetCategoriesQuery } from "@/redux/api/propertyApi";
 import { PropertyFormValues, propertySchema } from "@/lib/validation/property";
 
 const AMENITIES_LIST = [
@@ -54,22 +56,28 @@ export function PropertyForm({ propertyId, defaultValues }: PropertyFormProps) {
     useCreatePropertyMutation();
   const [updateProperty, { isLoading: isUpdating }] =
     useUpdatePropertyMutation();
+  const { data: categoriesData, isLoading: isLoadingCategories } =
+    useGetCategoriesQuery();
+
   const isEditing = !!propertyId;
   const isSubmitting = isCreating || isUpdating;
+  const categories = categoriesData?.data ?? [];
 
   const form = useForm<PropertyFormValues>({
     defaultValues: {
       title: "",
       description: "",
+      type: "APARTMENT",
       price: 0,
-      location: "",
-      city: "",
-      propertyType: "APARTMENT",
       bedrooms: 1,
       bathrooms: 1,
       areaSqft: undefined,
+      location: "",
+      city: "",
+      address: "",
       amenities: [],
       images: [""],
+      categoryId: "",
       ...defaultValues,
     } as PropertyFormValues,
   });
@@ -155,6 +163,36 @@ export function PropertyForm({ propertyId, defaultValues }: PropertyFormProps) {
           )}
         />
 
+        {/* Category — fetched from the categories endpoint */}
+        <FormField
+          control={form.control}
+          name="categoryId"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>Category</FormLabel>
+              {isLoadingCategories ? (
+                <Skeleton className="h-10 w-full" />
+              ) : (
+                <Select onValueChange={field.onChange} value={field.value}>
+                  <FormControl>
+                    <SelectTrigger>
+                      <SelectValue placeholder="Select a category" />
+                    </SelectTrigger>
+                  </FormControl>
+                  <SelectContent>
+                    {categories.map((category) => (
+                      <SelectItem key={category.id} value={category.id}>
+                        {category.name}
+                      </SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
+              )}
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+
         <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
           <FormField
             control={form.control}
@@ -184,6 +222,23 @@ export function PropertyForm({ propertyId, defaultValues }: PropertyFormProps) {
           />
         </div>
 
+        <FormField
+          control={form.control}
+          name="address"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>Full Address</FormLabel>
+              <FormControl>
+                <Input
+                  placeholder="House 12, Road 5, Gulshan 2, Dhaka 1212"
+                  {...field}
+                />
+              </FormControl>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+
         <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
           <FormField
             control={form.control}
@@ -211,7 +266,7 @@ export function PropertyForm({ propertyId, defaultValues }: PropertyFormProps) {
           />
           <FormField
             control={form.control}
-            name="propertyType"
+            name="type"
             render={({ field }) => (
               <FormItem>
                 <FormLabel>Property Type</FormLabel>
@@ -351,11 +406,6 @@ export function PropertyForm({ propertyId, defaultValues }: PropertyFormProps) {
           }}
         />
 
-        {/* Images — managed as plain array state, not useFieldArray.
-            useFieldArray requires an array of OBJECTS (needs a stable `id`
-            per row); `images` is string[], which its generic constraint
-            can't match — that's the source of the "does not satisfy
-            constraint 'never'" error. */}
         <FormField
           control={form.control}
           name="images"

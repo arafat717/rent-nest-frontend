@@ -5,7 +5,6 @@ import { baseApi } from "./baseApi";
 import {
   CreatePropertyPayload,
   LandlordProperty,
-  LandlordStats,
   UpdatePropertyPayload,
 } from "@/src/types/landlordProperty";
 import { RentalRequest, RentalStatus } from "@/src/types/rental";
@@ -13,7 +12,7 @@ import { RentalRequest, RentalStatus } from "@/src/types/rental";
 export const landlordApi = baseApi.injectEndpoints({
   endpoints: (builder) => ({
     getLandlordStats: builder.query<
-      { success: boolean; data: LandlordStats },
+      { success: boolean; data: any },
       void
     >({
       query: () => "/stats",
@@ -64,7 +63,7 @@ export const landlordApi = baseApi.injectEndpoints({
     >({
       query: ({ id, payload }) => ({
         url: `/properties/${id}`,
-        method: "PATCH",
+        method: "PUT",
         body: payload,
       }),
       invalidatesTags: (result, error, { id }) => [

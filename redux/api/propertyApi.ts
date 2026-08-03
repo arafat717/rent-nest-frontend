@@ -1,14 +1,20 @@
-import { Category, PropertyFilters, PropertyListResponse, PropertyResponse } from "@/src/types/property";
+import {
+  Category,
+  PropertyFilters,
+  PropertyListResponse,
+  PropertyResponse,
+} from "@/src/types/property";
 import { baseApi } from "./baseApi";
-
 
 const buildQueryParams = (filters: PropertyFilters) => {
   const params = new URLSearchParams();
 
   if (filters.location) params.append("location", filters.location);
   if (filters.city) params.append("city", filters.city);
-  if (filters.minPrice !== undefined) params.append("minPrice", String(filters.minPrice));
-  if (filters.maxPrice !== undefined) params.append("maxPrice", String(filters.maxPrice));
+  if (filters.minPrice !== undefined)
+    params.append("minPrice", String(filters.minPrice));
+  if (filters.maxPrice !== undefined)
+    params.append("maxPrice", String(filters.maxPrice));
   if (filters.propertyType && filters.propertyType !== "ALL") {
     params.append("propertyType", filters.propertyType);
   }
@@ -29,7 +35,10 @@ export const propertyApi = baseApi.injectEndpoints({
       providesTags: (result) =>
         result
           ? [
-              ...result.data.map(({ id }) => ({ type: "Property" as const, id })),
+              ...result.data.map(({ id }) => ({
+                type: "Property" as const,
+                id,
+              })),
               { type: "Property" as const, id: "LIST" },
             ]
           : [{ type: "Property" as const, id: "LIST" }],
@@ -46,7 +55,7 @@ export const propertyApi = baseApi.injectEndpoints({
     }),
 
     getCategories: builder.query<{ success: boolean; data: Category[] }, void>({
-      query: () => `/categories`,
+      query: () => `/category`,
     }),
   }),
 });

@@ -16,10 +16,12 @@ export interface Property {
   location: string;
   city: string;
   propertyType: PropertyType;
+  status: "AVAILABLE" | "RENTED" | "UNAVAILABLE";
   bedrooms: number;
   bathrooms: number;
   areaSqft?: number;
   amenities: string[];
+  type:string;
   images: string[];
   isAvailable: boolean;
   landlord: Landlord;
@@ -59,5 +61,7 @@ export interface PropertyResponse {
 export interface Category {
   id: string;
   name: string;
-  slug: string;
+  description: string;
+  createdAt: string;
+  updatedAt: string;
 }
