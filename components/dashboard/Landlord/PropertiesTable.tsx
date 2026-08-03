@@ -88,9 +88,9 @@ export function PropertiesTable() {
 
   if (showSkeleton) {
     return (
-      <div className="space-y-2">
+      <div className="space-y-3">
         {Array.from({ length: 4 }).map((_, i) => (
-          <Skeleton key={i} className="h-16 w-full rounded-md" />
+          <Skeleton key={i} className="h-16 w-full rounded-xl" />
         ))}
       </div>
     );
@@ -98,17 +98,19 @@ export function PropertiesTable() {
 
   if (isError) {
     return (
-      <p className="py-8 text-center text-muted-foreground">
+      <div className="rounded-xl border border-destructive/20 bg-destructive/5 py-10 text-center text-sm text-destructive">
         Couldn&apos;t load your properties.
-      </p>
+      </div>
     );
   }
 
   if (properties.length === 0) {
     return (
-      <div className="flex flex-col items-center gap-3 rounded-lg border border-dashed py-12 text-center">
-        <p className="font-medium">No properties listed yet</p>
-        <Button size="sm" asChild>
+      <div className="flex flex-col items-center gap-3 rounded-2xl border border-dashed border-border/80 bg-muted/30 py-12 text-center">
+        <p className="text-base font-semibold text-foreground">
+          No properties listed yet
+        </p>
+        <Button size="sm" asChild className="mt-1">
           <Link href="/dashboard/landlord/properties/new">
             Add Your First Property
           </Link>
@@ -119,23 +121,33 @@ export function PropertiesTable() {
 
   return (
     <>
-      <div className="rounded-lg border">
-        <Table>
-          <TableHeader>
+      <div className="overflow-hidden rounded-xl border border-border/60 bg-card shadow-sm">
+        <Table className="min-w-full">
+          <TableHeader className="bg-muted/60">
             <TableRow>
-              <TableHead>Property</TableHead>
-              <TableHead>Price</TableHead>
-              <TableHead>Requests</TableHead>
-              <TableHead>Available</TableHead>
-              <TableHead className="text-right">Actions</TableHead>
+              <TableHead className="px-4 py-3 text-xs uppercase tracking-[0.14em] text-muted-foreground">
+                Property
+              </TableHead>
+              <TableHead className="px-4 py-3 text-xs uppercase tracking-[0.14em] text-muted-foreground">
+                Price
+              </TableHead>
+              <TableHead className="px-4 py-3 text-xs uppercase tracking-[0.14em] text-muted-foreground">
+                Requests
+              </TableHead>
+              <TableHead className="px-4 py-3 text-xs uppercase tracking-[0.14em] text-muted-foreground">
+                Available
+              </TableHead>
+              <TableHead className="px-4 py-3 text-right text-xs uppercase tracking-[0.14em] text-muted-foreground">
+                Actions
+              </TableHead>
             </TableRow>
           </TableHeader>
           <TableBody>
             {properties.map((property) => (
-              <TableRow key={property.id}>
-                <TableCell>
+              <TableRow key={property.id} className="group hover:bg-primary/5">
+                <TableCell className="px-4 py-3.5">
                   <div className="flex items-center gap-3">
-                    <div className="relative h-10 w-14 shrink-0 overflow-hidden rounded-md bg-muted">
+                    <div className="relative h-11 w-14 shrink-0 overflow-hidden rounded-lg border border-border/60 bg-muted shadow-sm">
                       <Image
                         src={
                           property.images?.[0] ?? "/placeholder-property.jpg"
@@ -146,7 +158,7 @@ export function PropertiesTable() {
                       />
                     </div>
                     <div>
-                      <p className="line-clamp-1 font-medium">
+                      <p className="line-clamp-1 font-medium text-foreground">
                         {property.title}
                       </p>
                       <p className="text-xs text-muted-foreground">
@@ -155,15 +167,19 @@ export function PropertiesTable() {
                     </div>
                   </div>
                 </TableCell>
-                <TableCell>${property.price.toLocaleString()}/mo</TableCell>
-                <TableCell>
+                <TableCell className="px-4 py-3.5 text-sm font-medium text-foreground">
+                  ${property.price.toLocaleString()}/mo
+                </TableCell>
+                <TableCell className="px-4 py-3.5">
                   {property.activeRequestsCount > 0 ? (
-                    <Badge>{property.activeRequestsCount} pending</Badge>
+                    <Badge className="border-amber-200 bg-amber-50 text-amber-700 dark:border-amber-500/30 dark:bg-amber-500/10 dark:text-amber-300">
+                      {property.activeRequestsCount} pending
+                    </Badge>
                   ) : (
                     <span className="text-muted-foreground">—</span>
                   )}
                 </TableCell>
-                <TableCell>
+                <TableCell className="px-4 py-3.5">
                   <Select
                     value={property.status}
                     onValueChange={(value) =>
@@ -173,7 +189,7 @@ export function PropertiesTable() {
                       )
                     }
                   >
-                    <SelectTrigger className="w-32">
+                    <SelectTrigger className="h-9 w-32 rounded-lg border-border/70 bg-background/80 shadow-sm">
                       <SelectValue />
                     </SelectTrigger>
                     <SelectContent>
@@ -183,10 +199,14 @@ export function PropertiesTable() {
                     </SelectContent>
                   </Select>
                 </TableCell>
-                <TableCell className="text-right">
+                <TableCell className="px-4 py-3.5 text-right">
                   <DropdownMenu>
                     <DropdownMenuTrigger asChild>
-                      <Button variant="ghost" size="icon">
+                      <Button
+                        variant="ghost"
+                        size="icon"
+                        className="rounded-lg border border-border/60 bg-background/80 hover:bg-muted"
+                      >
                         <MoreHorizontal className="h-4 w-4" />
                       </Button>
                     </DropdownMenuTrigger>
