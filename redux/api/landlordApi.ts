@@ -11,10 +11,7 @@ import { RentalRequest, RentalStatus } from "@/src/types/rental";
 
 export const landlordApi = baseApi.injectEndpoints({
   endpoints: (builder) => ({
-    getLandlordStats: builder.query<
-      { success: boolean; data: any },
-      void
-    >({
+    getLandlordStats: builder.query<{ success: boolean; data: any }, void>({
       query: () => "/stats",
       providesTags: ["Property", "Rental"],
     }),
@@ -24,7 +21,7 @@ export const landlordApi = baseApi.injectEndpoints({
       { page?: number; limit?: number } | void
     >({
       query: (params) =>
-        `/properties?page=${params?.page ?? 1}&limit=${params?.limit ?? 10}`,
+        `/properties/my-properties?page=${params?.page ?? 1}&limit=${params?.limit ?? 10}`,
       providesTags: (result) =>
         result
           ? [

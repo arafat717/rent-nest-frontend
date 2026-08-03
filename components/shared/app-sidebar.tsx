@@ -43,16 +43,6 @@ const data = {
         url: "/dashboard/tenant/payments",
         icon: CreditCard,
       },
-      // {
-      //   title: "My Reviews",
-      //   url: "/dashboard/tenant/reviews",
-      //   icon: Star,
-      // },
-      // {
-      //   title: "Browse Properties",
-      //   url: "/properties",
-      //   icon: Building2,
-      // },
       {
         title: "Your Profile",
         url: "/dashboard/tenant/profile",

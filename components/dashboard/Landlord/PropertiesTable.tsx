@@ -56,7 +56,7 @@ export function PropertiesTable() {
 
   const showSkeleton = isLoading || isFetching;
   const properties = data?.data ?? [];
-  console.log("properties", properties);
+
   const handleStatusChange = async (
     id: string,
     status: "AVAILABLE" | "UNAVAILABLE" | "RENTED",
@@ -125,7 +125,7 @@ export function PropertiesTable() {
             <TableRow>
               <TableHead>Property</TableHead>
               <TableHead>Price</TableHead>
-              {/* <TableHead>Requests</TableHead> */}
+              <TableHead>Requests</TableHead>
               <TableHead>Available</TableHead>
               <TableHead className="text-right">Actions</TableHead>
             </TableRow>
@@ -156,14 +156,33 @@ export function PropertiesTable() {
                   </div>
                 </TableCell>
                 <TableCell>${property.price.toLocaleString()}/mo</TableCell>
-                {/* <TableCell>
+                <TableCell>
                   {property.activeRequestsCount > 0 ? (
                     <Badge>{property.activeRequestsCount} pending</Badge>
                   ) : (
                     <span className="text-muted-foreground">—</span>
                   )}
-                </TableCell> */}
-                <TableCell>{property.status}</TableCell>
+                </TableCell>
+                <TableCell>
+                  <Select
+                    value={property.status}
+                    onValueChange={(value) =>
+                      handleStatusChange(
+                        property.id,
+                        value as "AVAILABLE" | "UNAVAILABLE" | "RENTED",
+                      )
+                    }
+                  >
+                    <SelectTrigger className="w-32">
+                      <SelectValue />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="AVAILABLE">Available</SelectItem>
+                      <SelectItem value="UNAVAILABLE">Unavailable</SelectItem>
+                      <SelectItem value="RENTED">Rented</SelectItem>
+                    </SelectContent>
+                  </Select>
+                </TableCell>
                 <TableCell className="text-right">
                   <DropdownMenu>
                     <DropdownMenuTrigger asChild>
